@@ -1,9 +1,9 @@
 /*
-	This file defines the default projection and setup for the map.
-	This includes tile retrieval for specific zoom levels and locations
-	as well as caching tiles for usage.
+    This file defines the default projection and setup for the map.
+    This includes tile retrieval for specific zoom levels and locations
+    as well as caching tiles for usage.
 
-	The tiles are created using the GMap Image Cutter
+    The tiles are created using the GMap Image Cutter
 */
 
 // A projection class which projects the world coordinates to a
