@@ -1,0 +1,39 @@
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# Application files  #
+######################
+# Ignore all configs except the default one which can be used
+# as a template for custom configs
+Configs/*
+!Configs/default.json
+
+# Ignore the map images
+public/Images/Maps/**/*

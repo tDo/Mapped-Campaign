@@ -1,0 +1,7 @@
+{
+	"database": { "host"     : "localhost",
+				  "name"     : "databasename",
+				  "username" : "username",
+				  "password" : "password"},
+	"app": { "debug" : true }
+}
