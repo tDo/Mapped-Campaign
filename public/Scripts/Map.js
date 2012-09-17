@@ -195,7 +195,7 @@ function Map(mapId, mapContainerDomId) {
         if (data.path == undefined) return;
 
         // Create the custom map type and apply our projection
-        var cMap        = new CustomMapType('Images/Maps/'+ data.path +'/');
+        var cMap        = new CustomMapType('images/maps/'+ data.path +'/');
         cMap.projection = new FiftyProjection();
 
         // And set is as the map type

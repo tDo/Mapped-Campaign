@@ -1,0 +1,29 @@
+{
+    "hash": "57a371812ffa8bd25fcd88568d9eb330",
+    "packages": [
+        {
+            "package": "doctrine/common",
+            "version": "2.2.3"
+        },
+        {
+            "package": "doctrine/dbal",
+            "version": "2.2.2"
+        },
+        {
+            "package": "doctrine/orm",
+            "version": "2.2.2"
+        },
+        {
+            "package": "slim/slim",
+            "version": "1.6.7"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ]
+}
