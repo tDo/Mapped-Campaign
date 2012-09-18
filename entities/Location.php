@@ -4,18 +4,7 @@ namespace Entities;
 /**
  * @Entity @Table(name="locations")
  */
-class Location {
-    /** 
-     * @Id @Column(type="integer") @GeneratedValue
-     * @var int
-     **/
-    protected $id;
-
-    /** 
-     * @Column(type="string") 
-     * @var string
-     **/
-    protected $name;
+class Location extends Point {
 
     /**
      * @ManyToOne(targetEntity="Entities\Region", inversedBy="locations")
@@ -23,19 +12,19 @@ class Location {
      */
     protected $district;
 
-    public function getId() {
-        return $this->id;
-    }
-
-    public function getName() {
-        return $this->name;
-    }
-
     public function getDistrict() {
         return $this->districts;
     }
-
     public function setDistrict($district) {
         $this->district = $district;
+    }
+
+
+    public static function create($em, $data) {
+        // For now we just assume perfect data
+        // TODO: Add validation
+        $location = new Location();
+        $location->setDistrict($em->find("Entities\District", (int) $data["districtId"]));
+        //$location->
     }
 }

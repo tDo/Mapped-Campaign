@@ -1,4 +1,43 @@
+/*
+    The main stylesheet for styling the campaigns output
+ */
+
+// Variables declaration
+@backgroundColor: #000;
+@fontSize:       12pt;
+
 body {
-	// The map container
-	#map { background-color: #000 !important; }
+    margin  : 0;
+    padding : 0;
+    background-color: @backgroundColor;
+    font-size: @fontSize;
+
+    // Some default element stylings
+    h1 { font-size: 18pt }
+    h2 { font-size: 16pt; }
+    h3 { font-size: 14pt; }
+
+	// Styles for the map itsself
+	#map {
+        width   : 100%;
+        height  : 110%;
+        margin  : 0;
+        padding : 0;
+        background-color: @backgroundColor !important;
+        z-index: 1;
+    }
+
+    // Styles for the content container as well as basic forms
+    #content, #forms {
+        position : absolute;
+        display  : none;
+        top      : 0;
+        right     : 0;
+        height   : 100%;
+        width    : 50%;
+
+        background-color: #fff;
+        opacity  : 0.95;
+        z-index  : 2;
+    }
 }

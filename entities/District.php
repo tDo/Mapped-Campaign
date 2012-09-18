@@ -5,26 +5,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @Entity @Table(name="districts")
  */
-class District {
-
-    /** 
-     * @Id @Column(type="integer") @GeneratedValue
-     * @var int
-     **/
-
-    protected $id;
-
-    /** 
-     * @Column(type="string") 
-     * @var string
-     **/
-    protected $name;
+class District extends Base implements \JsonSerializable {
 
     /**
      * @ManyToOne(targetEntity="Entities\Region", inversedBy="districts")
+     * @JoinColumn(name="region_id", referencedColumnName="id", onDelete="CASCADE")
      * @var Entities\Region
      */
     protected $region;
+
+    /**
+     * @Column(type="text")
+     * @var string
+     */
+    protected $polygon;
 
     /**
      *
@@ -53,26 +47,36 @@ class District {
         $this->buildings         = new ArrayCollection();
     }
 
-    public function getId() {
-        return $this->id;
-    }
+    public static function create($em, $data) {
+        // For now we assume just perfect data
+        // This must of course be filered later on
+        $region   = $em->find('Entities\Region', (int) $data['region_id']);
+        $district = new District();
+        $district->setRegion($region);
+        $district->setName($data['name']);
+        $district->setDescription($data['description']);
+        $district->setPolygon($data['polygon']);
 
-    public function getName() {
-        return $this->name;
+        return $district;
     }
 
     public function getRegion() {
         return $this->region;
     }
-
     public function setRegion($region) {
         $this->region = $region;
+    }
+
+    public function getPolygon() {
+        return $this->polygon;
+    }
+    public function setPolygon($polygon) {
+        $this->polygon = $polygon;
     }
 
     public function getLocations() {
         return $this->locations;
     }
-
     public function addLocation($location) {
         $this->locations[] = $location;
     }
@@ -80,7 +84,6 @@ class District {
     public function getPointOfInterests() {
         return $this->pointOfInterests;
     }
-
     public function addPointOfInterest($poi) {
         $this->pointOfInterest[] = $poi;
     }
@@ -88,8 +91,15 @@ class District {
     public function getBuildings() {
         return $this->buildings;
     }
-
     public function addBuilding($building) {
         $this->buildings[] = $building;
+    }
+
+    public function jsonSerialize() {
+        return array(
+            "id"      => $this->getId(),
+            "name"    => $this->getName(),
+            "polygon" => $this->getPolygon()
+        );
     }
 }

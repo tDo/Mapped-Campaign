@@ -1,24 +1,15 @@
 <?php
 namespace Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @Entity @Table(name="regions")
  */
-class Region {
-    /** 
-     * @Id @Column(type="integer") @GeneratedValue
-     * @var int
-     **/
-    protected $id;
-
-    /** 
-     * @Column(type="string") 
-     * @var string
-     **/
-    protected $name;
-
+class Region extends Base implements \JsonSerializable {
     /**
      * @ManyToOne(targetEntity="Entities\Map", inversedBy="regions")
+     * @JoinColumn(name="map_id", referencedColumnName="id", onDelete="CASCADE")
      * @var Entities\Map
      */
     protected $map;
@@ -32,14 +23,6 @@ class Region {
 
     public function __construct() {
         $this->districts = new ArrayCollection();
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-
-    public function getName() {
-        return $this->name;
     }
 
     public function getMap() {
@@ -56,5 +39,13 @@ class Region {
 
     public function addDistrict($district) {
         $this->districts[] = $district;
+    }
+
+    public function jsonSerialize() {
+        return array(
+            "id"        => $this->getId(),
+            "name"      => $this->getName(),
+            "districts" => $this->getDistricts()->toArray()
+        );
     }
 }
