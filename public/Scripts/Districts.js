@@ -144,9 +144,9 @@ function Districts(map) {
                 data: data
                 //dataType: "json"
             }).done(function() {
-                alert( "Data Saved");
                 self.isEditing      = false;
                 self.editingPolygon = null;
+                $('#forms').hide();
             });
 
         return false;

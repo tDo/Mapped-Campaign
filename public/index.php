@@ -19,7 +19,7 @@ $classLoader = new \Doctrine\Common\ClassLoader('Entities', __DIR__ . '/../', 'l
 $classLoader->register();
 
 // Instantiate application
-$app = new Slim();
+$app = new \Slim\Slim();
 $app->config(array(
     'debug'          => true, //$config->app["debug"],
     'templates.path' => __DIR__ .'/../views/'
@@ -68,27 +68,18 @@ function change($call, $app, $em) {
     if (is_callable($call)) {
         // Get request instance
         $req = $app->request();
-
-        // And begin the transaction for instance creation
-        $em->getConnection()->beginTransaction();
         try {
-            // Create the instance by calling our callback
+            // Try to store the changes
             $entity = call_user_func($call, $em, $req->post());
-            // Seems to be createable, persists it
-            $em->persist($entity);
-            $em->flush();
-            $em->getConnection()->commit();
-
-            // Return OK response (for now)
-            $response->body(json_encode(array("OK" => "OK")));
-
-        } catch (Exception $ex) {
-            // Something failed, rollback transaction and close the connection
-            $em->getConnection()->rollback();
-            $em->close();
-
-            // TODO: Implement error handling
-            $response->body(json_encode(array("Error" => $ex->getMessage())));
+            $entity->setFullySerialize(true);
+            $response->body(json_encode(array('ok' => 'ok', 'entity' => $entity)));
+        } catch (Entities\EntityException $ex) {
+            // We encountered saving errors:
+            $response->status($ex->getStatusCode());
+            $response->body(json_encode(array("errors" => array(
+                'message'       => $ex->getMessage(),
+                'invalidFields' => $ex->getInvalidFields()
+            ))));
         }
     } else {
         // Callback is not a function
