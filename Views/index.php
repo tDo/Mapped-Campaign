@@ -46,6 +46,7 @@
                 <textarea name = "description"></textarea>
 
                 <button type="submit">Speichern</button>
+                <button type="reset">Abbrechen</button>
             </fieldset>
         </form>
 

@@ -79,6 +79,7 @@ function Districts(map) {
 
     this.editing        = false;
     this.editingPolygon = null;
+    this.originalPath   = null;
 
     // Will start editing a polygon
     // Editing may be "editing of a new district" or "editing of an existant district"
@@ -86,29 +87,62 @@ function Districts(map) {
     this.edit = function(polygon) {
         // If we are already editing something or the provided polygon is invalid, stop right here
         if (polygon == undefined) return false;
-        if (this.isEditing) return false;
+        if (self.isEditing) return false;
 
-        this.isEditing      = true;
-        this.editingPolygon = polygon;
+        self.isEditing      = true;
+        self.editingPolygon = polygon;
         polygon.setEditable(true);
 
         // Is this a new one or an existing polygon...
         if (!polygon.isNew()) {
+            // Exisitng entry
+            // Store current path of the polygon (In case we wish to reset it later on)
+            // Yes this is done by a conversion in between since else the points would be handled
+            // by reference which means that they hold all translations made. This way we get a clean
+            // copy.
+            self.originalPath = polygon.toJson().toPolygon().getPath();
+
+            // Load the data to show
             $.get('district/'+ polygon.get('id'), function(data) {
                 $('#district_form input[name=name]').val(data.name);
                 $('#district_form textarea[name=description]').val(data.description);
                 $('#forms').show();
             }, 'json')
-            // Existing one (TODO: Load data from that)
-            //alert("So, not new?");
         } else {
-            // A New one
+            // A New one, just show the forms
+            $('#district_form input[name=name]').val("");
+            $('#district_form textarea[name=description]').val("");
             $('#forms').show();
         }
     };
 
+    // Cancels the editing process
+    // In case a new district was currently being created the polygon will be removed from the map.
+    // Also the forms will be hidden and any changes made just be reset
+    this.cancel = function() {
+        if (!self.isEditing) return false;
+
+        if (self.editingPolygon) {
+            // Reset editing mode
+            self.editingPolygon.setEditable(false);
+            // If this is a new polygon, also remove it from the map
+            if (self.editingPolygon.isNew()) {
+                self.editingPolygon.setMap(null);
+            } else {
+                // If not, restore the path
+                if (self.originalPath)
+                    self.editingPolygon.setPath(self.originalPath);
+            }
+        }
+
+        self.isEditing      = false;
+        self.editingPolygon = null;
+        self.originalPath   = null;
+        $('#forms').hide();
+    };
+
     // Bind to save event of the editing form, so we can submit the data
-    $('#district_form').bind('submit', function() {
+    $('#district_form').on('submit', function() {
         // Just stop here is we are not editing anything
         if (!self.isEditing || !self.editingPolygon) return false;
 
@@ -139,17 +173,35 @@ function Districts(map) {
         }
 
         $.ajax({
-                type: type,
-                url:  url,
-                data: data
-                //dataType: "json"
-            }).done(function() {
-                self.isEditing      = false;
-                self.editingPolygon = null;
-                $('#forms').hide();
+                type:     type,
+                url:      url,
+                data:     data,
+                dataType: "json"
+            }).done(function(data) {
+                if (data.ok == "ok") {
+                    // Was ok, was saved, we are done
+                    self.isEditing      = false;
+
+                    // Update the entity infos for the polygon
+                    self.editingPolygon.set('id',   data.entity.id);
+                    self.editingPolygon.set('name', data.entity.name);
+
+                    self.editingPolygon = null;
+                    self.originalPath   = null;
+                    $('#forms').hide();
+                } else {
+                    // Errors occured
+                    alert(data.error.message);
+                    // TODO: Some field highlighting would be nice...
+                }
             });
 
         return false;
     });
-
+    
+    // Bind to reset handler
+    $('#district_form').on('reset', function() {
+        // And just call the cancel procedure
+        self.cancel();
+    });
 }

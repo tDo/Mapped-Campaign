@@ -76,7 +76,7 @@ function change($call, $app, $em) {
         } catch (Entities\EntityException $ex) {
             // We encountered saving errors:
             $response->status($ex->getStatusCode());
-            $response->body(json_encode(array("errors" => array(
+            $response->body(json_encode(array("error" => array(
                 'message'       => $ex->getMessage(),
                 'invalidFields' => $ex->getInvalidFields()
             ))));
