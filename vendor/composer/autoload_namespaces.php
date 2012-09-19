@@ -6,8 +6,10 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Slim' => $vendorDir . '/slim/slim/Slim/',
+    'Slim' => $vendorDir . '/slim/slim/.',
     'Doctrine\\ORM' => $vendorDir . '/doctrine/orm/lib/',
     'Doctrine\\DBAL' => $vendorDir . '/doctrine/dbal/lib/',
     'Doctrine\\Common' => $vendorDir . '/doctrine/common/lib/',
+    'Aura\\Filter' => $vendorDir . '/aura/filter/src/',
+    'Aura\\Composer\\' => $vendorDir . '/aura/default-installer/src/',
 );

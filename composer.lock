@@ -1,6 +1,18 @@
 {
-    "hash": "57a371812ffa8bd25fcd88568d9eb330",
+    "hash": "76d82bfbba553a3f6fb127d5c6d74b74",
     "packages": [
+        {
+            "package": "aura/default-installer",
+            "version": "dev-master",
+            "source-reference": "ea68f15820fb3a9b703f657854657965d20cceb4",
+            "commit-date": "1345088820"
+        },
+        {
+            "package": "aura/filter",
+            "version": "dev-master",
+            "source-reference": "64c02f1c028d9af8f355d400448db49724b949a9",
+            "commit-date": "1346779139"
+        },
         {
             "package": "doctrine/common",
             "version": "2.2.3"
@@ -15,7 +27,7 @@
         },
         {
             "package": "slim/slim",
-            "version": "1.6.7"
+            "version": "2.1.0"
         }
     ],
     "packages-dev": null,
@@ -23,7 +35,8 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ]
+    "stability-flags": {
+        "aura/filter": 20,
+        "aura/default-installer": 20
+    }
 }

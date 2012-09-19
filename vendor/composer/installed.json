@@ -1,32 +1,5 @@
 [
     {
-        "name": "slim/slim",
-        "version": "1.6.7",
-        "version_normalized": "1.6.7.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeguy/Slim",
-            "reference": "1.6.7"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://github.com/codeguy/Slim/zipball/1.6.7",
-            "reference": "1.6.7",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2.0"
-        },
-        "time": "2012-08-28 21:09:45",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Slim": "Slim/"
-            }
-        }
-    },
-    {
         "name": "doctrine/common",
         "version": "2.2.3",
         "version_normalized": "2.2.3.0",
@@ -44,7 +17,6 @@
         "require": {
             "php": ">=5.3.2"
         },
-        "time": "2012-08-29 08:04:14",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -72,7 +44,6 @@
             "php": ">=5.3.2",
             "doctrine/common": ">=2.2.0,<=2.2.99"
         },
-        "time": "2012-04-13 07:56:12",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -102,12 +73,92 @@
             "doctrine/common": ">=2.2.0,<2.2.99",
             "doctrine/dbal": ">=2.2.1,<2.2.99"
         },
-        "time": "2012-04-13 08:02:34",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-0": {
                 "Doctrine\\ORM": "lib/"
+            }
+        }
+    },
+    {
+        "name": "slim/slim",
+        "version": "2.1.0",
+        "version_normalized": "2.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeguy/Slim",
+            "reference": "2.1.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/codeguy/Slim/zipball/2.1.0",
+            "reference": "2.1.0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Slim": "."
+            }
+        }
+    },
+    {
+        "name": "aura/default-installer",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/auraphp/default-installer",
+            "reference": "ea68f15820fb3a9b703f657854657965d20cceb4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/auraphp/default-installer/zipball/ea68f15820fb3a9b703f657854657965d20cceb4",
+            "reference": "ea68f15820fb3a9b703f657854657965d20cceb4",
+            "shasum": ""
+        },
+        "time": "2012-08-16 01:47:00",
+        "type": "composer-installer",
+        "extra": {
+            "class": "Aura\\Composer\\DefaultInstaller"
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Aura\\Composer\\": "src/"
+            }
+        }
+    },
+    {
+        "name": "aura/filter",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/auraphp/Aura.Filter",
+            "reference": "64c02f1c028d9af8f355d400448db49724b949a9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/auraphp/Aura.Filter/zipball/64c02f1c028d9af8f355d400448db49724b949a9",
+            "reference": "64c02f1c028d9af8f355d400448db49724b949a9",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.0",
+            "aura/default-installer": "*"
+        },
+        "time": "2012-09-04 17:18:59",
+        "type": "aura-package",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Aura\\Filter": "src/"
             }
         }
     }
