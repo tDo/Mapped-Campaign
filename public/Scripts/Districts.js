@@ -69,6 +69,11 @@ function Districts(map) {
             console.log("Id: "+ poly.get("id"));
         });
 
+        // On click select for editing (If currently no other one is being editied)
+        google.maps.event.addListener(poly, 'click', function() {
+              self.edit(poly);
+        });
+
         poly.setMap(self.map.map);
     };
 
@@ -81,15 +86,21 @@ function Districts(map) {
     this.edit = function(polygon) {
         // If we are already editing something or the provided polygon is invalid, stop right here
         if (polygon == undefined) return false;
-        if (this.editing) return false;
+        if (this.isEditing) return false;
 
         this.isEditing      = true;
         this.editingPolygon = polygon;
+        polygon.setEditable(true);
 
         // Is this a new one or an existing polygon...
         if (!polygon.isNew()) {
+            $.get('district/'+ polygon.get('id'), function(data) {
+                $('#district_form input[name=name]').val(data.name);
+                $('#district_form textarea[name=description]').val(data.description);
+                $('#forms').show();
+            }, 'json')
             // Existing one (TODO: Load data from that)
-            alert("So, not new?");
+            //alert("So, not new?");
         } else {
             // A New one
             $('#forms').show();
@@ -101,9 +112,11 @@ function Districts(map) {
         // Just stop here is we are not editing anything
         if (!self.isEditing || !self.editingPolygon) return false;
 
-        var data = {};
+        // Stop editing mode
+        self.editingPolygon.setEditable(false);
 
         // Serialize the form data
+        var data = {};
         jQuery.map($(this).serializeArray(), function(n, i) {
             data[n['name']] = n['value'];
         });
@@ -114,9 +127,20 @@ function Districts(map) {
         // And serialize the polygon
         data.polygon   = self.editingPolygon.toJson();
 
+        // Based on wether this is an existant district or a new one
+        // the url as well as the parameters will change
+        var type = 'POST';
+        var url  = 'district/add/';
+        if (!self.editingPolygon.isNew()) {
+            // Not a new one: Editing
+            type             = "PUT";
+            url              = 'district/edit/';
+            data.district_id = self.editingPolygon.get('id');
+        }
+
         $.ajax({
-                type: "post",
-                url:  "district/add/",
+                type: type,
+                url:  url,
                 data: data
                 //dataType: "json"
             }).done(function() {

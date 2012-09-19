@@ -42,10 +42,15 @@ class Region extends Base implements \JsonSerializable {
     }
 
     public function jsonSerialize() {
-        return array(
+        $result = array(
             "id"        => $this->getId(),
             "name"      => $this->getName(),
             "districts" => $this->getDistricts()->toArray()
         );
+
+        if ($this->getFullySerialize())
+            $result['description'] = $this->getDescription();
+
+        return $result;
     }
 }

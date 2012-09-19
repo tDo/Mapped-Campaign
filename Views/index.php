@@ -17,24 +17,6 @@
     $(document).ready(function () {
         // Create map instance and load the map
         var map    = new Map(1, 'map');
-        /*var editor = new Editor(map);
-
-        // Testwise bind to district creation form
-        /*$('#district_create').bind('submit', function() {
-            $.ajax({
-                type: "post",
-                url:  "district/add/",
-                data: { region_id:   1,
-                        name:        $('#district_name').val(),
-                        description: $('#district_description').val(),
-                        polygon:     editor.polygonToJson()
-                }//,
-                //dataType: "json"
-            }).done(function() {
-              alert( "Data Saved: ");
-            });
-            return false;
-        });*/
     });
     </script>
 </head>

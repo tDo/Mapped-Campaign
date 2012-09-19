@@ -60,6 +60,21 @@ class District extends Base implements \JsonSerializable {
         return $district;
     }
 
+    public static function edit($em, $data) {
+        // For now we assume just perfect data
+        // This must of course be filered later on
+        $region   = $em->find('Entities\Region', (int) $data['region_id']);
+        $district = $em->find('Entities\District', (int) $data['district_id']);
+        if ($district) {
+            $district->setRegion($region);
+            $district->setName($data['name']);
+            $district->setDescription($data['description']);
+            $district->setPolygon($data['polygon']);
+        }
+
+        return $district;
+    }
+
     public function getRegion() {
         return $this->region;
     }
@@ -96,10 +111,15 @@ class District extends Base implements \JsonSerializable {
     }
 
     public function jsonSerialize() {
-        return array(
-            "id"      => $this->getId(),
-            "name"    => $this->getName(),
-            "polygon" => $this->getPolygon()
+        $result = array(
+            "id"        => $this->getId(),
+            "name"      => $this->getName(),
+            "polygon" => $this->getPolygon()        
         );
+
+        if ($this->getFullySerialize())
+            $result['description'] = $this->getDescription();
+
+        return $result;
     }
 }

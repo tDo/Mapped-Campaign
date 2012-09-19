@@ -5,7 +5,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @Entity @Table(name="maps")
  */
-class Map implements \JsonSerializable {
+class Map extends Base implements \JsonSerializable {
 
     /** 
      * @Id @Column(type="integer") @GeneratedValue
@@ -65,12 +65,17 @@ class Map implements \JsonSerializable {
     }
 
     public function jsonSerialize() {
-        return(array(
+        $result = array(
             "id"      => $this->getId(),
             "name"    => $this->getName(),
             "path"    => $this->getPath(),
             "regions" => $this->getRegions()->toArray()
-        ));   
+        );
+
+        if ($this->getFullySerialize())
+            $result['description'] = $this->getDescription();
+
+        return $result;  
     }
 
 }

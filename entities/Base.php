@@ -24,6 +24,25 @@ abstract class Base {
      */
     protected $description;
 
+    /**
+     * Flag deciding wether a json serialize shall serialize all
+     * values or just a partial of the whole instance. This is used
+     * to reduce costs when not all data is required (Like long descriptions
+     * when we only wish to retrieve a basic overview of the map instances)
+     * @var boolean
+     */
+    private $fullySerialize = false;
+
+    public function setFullySerialize($val) {
+        if (!is_bool($val))
+            throw new InvalidArgumentException('Fully Serialize only accepts boolean arguments');
+
+        $this->fullySerialize = $val;
+    }
+    public function getFullySerialize() {
+        return $this->fullySerialize;
+    }
+
     public function getId() {
         return $this->id;
     }
