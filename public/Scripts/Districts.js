@@ -43,14 +43,50 @@ String.prototype.toPolygon = function() {
 
     // Finally return the polygon
     return new google.maps.Polygon({
-        paths: coords,
-        fillOpacity: 0.05
+        paths:        coords
       });
 }
 
 function Districts(map) {
     var self = this;
     this.map = map;
+
+    // Function handles "Adding polygons to the map"
+    // This might be done with existing or new polygons likewise
+    // exisiting polygons just retrieve event resets
+    // Also the styles of the polygons will be applied here
+    this.addPolygon = function(polygon) {
+        // Clear all listeners beforehand
+        google.maps.event.clearInstanceListeners(polygon);
+
+        // Bind event handlers
+        google.maps.event.addListener(polygon, 'mouseover', function() {
+            console.log("Name: "+ polygon.get("name"));
+            console.log("Id: "+ polygon.get("id"));
+
+            if (!self.isEditing)
+                polygon.set('fillOpacity', 0.25);
+        });
+
+        google.maps.event.addListener(polygon, 'mouseout', function() {
+            if (!self.isEditing)
+                polygon.set('fillOpacity', 0.05);
+        });
+
+        // On click select for editing (If currently no other one is being editied)
+        google.maps.event.addListener(polygon, 'click', function() {
+              self.edit(polygon);
+        });
+
+        // Apply polygon styles
+        polygon.set('strokeColor',   '#fff');
+        polygon.set('strokeWeight',  2);
+        polygon.set('strokeOpacity', 0.25);
+        polygon.set('fillColor',     '#000');
+        polygon.set('fillOpacity',   0.05);
+
+        polygon.setMap(self.map.map);
+    };
 
     // Adds a ditrict from storage to the map and already assigns all required data
     this.add = function(district) {
@@ -59,22 +95,11 @@ function Districts(map) {
         if (district.polygon == undefined || district.id == undefined || district.name == undefined) return false;
 
         // Create the polygon and add it to the map
-        var poly = district.polygon.toPolygon();
-        poly.set('id',   district.id);
-        poly.set('name', district.name);
+        var polygon = district.polygon.toPolygon();
+        polygon.set('id',   district.id);
+        polygon.set('name', district.name);
 
-        // Bind event handlers
-        google.maps.event.addListener(poly, 'mouseover', function() {
-            console.log("Name: "+ poly.get("name"));
-            console.log("Id: "+ poly.get("id"));
-        });
-
-        // On click select for editing (If currently no other one is being editied)
-        google.maps.event.addListener(poly, 'click', function() {
-              self.edit(poly);
-        });
-
-        poly.setMap(self.map.map);
+        self.addPolygon(polygon);
     };
 
     this.editing        = false;
@@ -132,6 +157,8 @@ function Districts(map) {
                 // If not, restore the path
                 if (self.originalPath)
                     self.editingPolygon.setPath(self.originalPath);
+                // And readd the polygon
+                self.addPolygon(self.editingPolygon);
             }
         }
 
@@ -185,6 +212,7 @@ function Districts(map) {
                     // Update the entity infos for the polygon
                     self.editingPolygon.set('id',   data.entity.id);
                     self.editingPolygon.set('name', data.entity.name);
+                    self.addPolygon(self.editingPolygon);
 
                     self.editingPolygon = null;
                     self.originalPath   = null;
