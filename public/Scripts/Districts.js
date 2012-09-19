@@ -67,21 +67,27 @@ function Districts(map) {
 
         // Bind event handlers
         google.maps.event.addListener(polygon, 'mouseover', function() {
-            console.log("Name: "+ polygon.get("name"));
-            console.log("Id: "+ polygon.get("id"));
-
-            if (!self.isEditing)
+            if (!self.map.editor.isEditing())
                 polygon.set('fillOpacity', 0.25);
         });
 
         google.maps.event.addListener(polygon, 'mouseout', function() {
-            if (!self.isEditing)
+            if (!self.map.editor.isEditing())
                 polygon.set('fillOpacity', 0.05);
         });
 
         // On click select for editing (If currently no other one is being editied)
         google.maps.event.addListener(polygon, 'click', function() {
-              self.edit(polygon);
+            if (!self.map.editor.isEditing())
+                // Only edit if we are in district editing mode
+                if (self.map.editor.getMode() == EditorModes.EditDistrict)
+                    // We are in editing mode for districts, show editor
+                    self.edit(polygon);
+                else if (self.map.editor.getMode() == EditorModes.None) {
+                    // Default mode, show infos
+                    console.log("Name: "+ polygon.get("name"));
+                    console.log("Id: "+ polygon.get("id"));
+                }
         });
 
         // Apply polygon styles
@@ -118,7 +124,7 @@ function Districts(map) {
     this.edit = function(polygon) {
         // If we are already editing something or the provided polygon is invalid, stop right here
         if (polygon == undefined) return false;
-        if (self.isEditing) return false;
+        if (self.map.editor.isEditing()) return false;
 
         self.isEditing      = true;
         self.editingPolygon = polygon;

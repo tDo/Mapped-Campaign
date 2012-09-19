@@ -27,6 +27,19 @@ body {
         z-index: 1;
     }
 
+    // Styles for the editor controls
+    #editor_controls {
+        position: absolute;
+        width: 200px;
+        height: 100px;
+        top: 0;
+        right: 0;
+        background-color: #fff;
+        z-index: 2;
+
+        .active { color: red; }
+    }
+
     // Styles for the content container as well as basic forms
     #content, #forms {
         position : absolute;
@@ -38,6 +51,6 @@ body {
 
         background-color: #fff;
         opacity  : 0.95;
-        z-index  : 2;
+        z-index  : 3;
     }
 }
