@@ -156,18 +156,37 @@ $app->get('/map/:id', function($id) use ($app, $em) {
     get('Entities\Map', (int) $id, false, $app, $em);
 });
 
+/**
+ * GET - Retrieve district data by id
+ * A call to this route will return the district and extended information (like description) as well
+ * as all subpoints in this district
+ */
 $app->get('/district/:id', function($id) use ($app, $em) {
     get('Entities\District', (int) $id, true, $app, $em);
 });
 
+/**
+ * POST - Add a new district to the map
+ * By calling this route a new district will be added to the map if all data is supplied and valid
+ * required post data holds region_id, name and description
+ */
 $app->post('/district/add/', function() use ($app, $em) {
     change('Entities\District::create', $app, $em);
 });
 
+/**
+ * PUT - Edit an existing district
+ * By calling this route an existant district will be changed given that the passed data is valid.
+ * Valid data includes region_id, distric_id, name and description
+ */
 $app->put('/district/edit/', function() use ($app, $em) {
     change('Entities\District::edit', $app, $em);
 });
 
+/**
+ * DELETE - Removes an existing district and all data assigned to it
+ * By calling this route a district and all locations, points of intereset and buildings in it will be removed
+ */
 $app->delete('/district/delete/:id', function($id) use ($app, $em) {
     delete('Entities\District', (int) $id, $app, $em);
 });

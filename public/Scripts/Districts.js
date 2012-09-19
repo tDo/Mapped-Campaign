@@ -47,6 +47,12 @@ String.prototype.toPolygon = function() {
       });
 }
 
+/**
+ * District handler. Holds options to add, edit, delete and show districts
+ * on the map. Will also make sure that the correct editors are called
+ * and the correct actions on the api.
+ * @param {Map} map The map handling instance
+ */
 function Districts(map) {
     var self = this;
     this.map = map;
