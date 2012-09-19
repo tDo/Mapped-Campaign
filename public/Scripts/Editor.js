@@ -1,4 +1,10 @@
 /**
+ * This file holds functionality to allow editing of the map itsself. Like adding
+ * and editing districts (And the polygons which describe them) and adding further
+ * information to stored districts.
+ */
+
+/**
  * Holds a list of all available editor modes
  * which can be set on the editor instance via
  * editor.setMode(EditorModes.xyz)
