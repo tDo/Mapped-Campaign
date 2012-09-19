@@ -1,4 +1,19 @@
-
+/**
+ * Holds a list of all available editor modes
+ * which can be set on the editor instance via
+ * editor.setMode(EditorModes.xyz)
+ * The editor will then decide itsself what to do.
+ * It's also possible to bind dom-elements against the mode
+ * selection (When they are clicked the mode will be changed).
+ * This happens by applying a custom data-attribute to the element
+ * e.g.
+ *
+ * <myElement data-editormode="None|AddDistrict|EditDistrict|...">..</myElement>
+ * 
+ * The editor will then automatically bind the click event of that element.
+ * Also when the mode is selected the css class "active" will be applied.
+ * @type {Object}
+ */
 var EditorModes = { None:                0,
                     AddDistrict:         1,
                     EditDistrict:        2,
@@ -10,6 +25,16 @@ var EditorModes = { None:                0,
                     EditBuilding:        8
                   };
 
+/**
+ * Holds the editor which is capable of changing
+ * the editing/adding modes of the map. Internally a drawingManager
+ * instance of the google maps api will be used without displaying the actual
+ * control element on the map. The custom selection can be added via any dom-element
+ * in the actual markup. See documentation for EditorModes for an explanation on how
+ * to add those custom controls
+ * 
+ * @param {Map} map The outer map handler
+ */
 function Editor(map) {
     var self = this;
     this.map = map;
@@ -113,7 +138,7 @@ function Editor(map) {
     // Finally set to default (None) mode for the beginning
     self.setMode(EditorModes.None);
 
-    // Bind event which is fired when a polygon has been compledted
+    // Bind event which is fired when a polygon has been completed
     google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
         // Start editing the district
         self.setMode(EditorModes.EditDistrict);
