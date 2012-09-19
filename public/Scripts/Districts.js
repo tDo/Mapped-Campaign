@@ -168,6 +168,40 @@ function Districts(map) {
         $('#forms').hide();
     };
 
+    // Delete the currently edited polygon/district
+    this.delete = function() {
+        if (!self.isEditing || !self.editingPolygon) return false;
+
+        // Small closure handler to call when the process is done
+        var done = function() {
+            self.editingPolygon.setMap(null);
+            self.isEditing      = false;
+            self.editingPolygon = null;
+            self.originalPath   = null;
+            $('#forms').hide();
+        }
+
+        if (self.editingPolygon.isNew()) {
+            // A new entry must just be removed from the map
+            done();
+        } else {
+            // If the entry is not new, we must tell the server so
+            $.ajax({
+                type:     'DELETE',
+                url:      'district/delete/'+ self.editingPolygon.get('id'),
+                dataType: 'json'
+            }).done(function(data) {
+                if (data.ok == "ok") {
+                    // Deleted and done
+                    done();
+                } else {
+                    // Something went wrong...
+                    alert(data.error.message);
+                }
+            })
+        }
+    }
+
     // Bind to save event of the editing form, so we can submit the data
     $('#district_form').on('submit', function() {
         // Just stop here is we are not editing anything
@@ -231,5 +265,10 @@ function Districts(map) {
     $('#district_form').on('reset', function() {
         // And just call the cancel procedure
         self.cancel();
+    });
+
+    // Bind to delete handler
+    $('#district_form *[name=delete]').on('click', function() {
+        self.delete();
     });
 }

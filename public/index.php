@@ -45,8 +45,42 @@ function get($entity, $id, $fullySerialize, $app, $em) {
         $entity->setFullySerialize($fullySerialize);
         $response->body(json_encode($entity));
     } else {
-        // Map not found, return default 404 error (File not found)
+        // Entity not found, return default 404 error (File not found)
         $response->status(404);
+    }
+}
+
+/**
+ * Function can be used to delete an entity from the database
+ * @param  string        $entity Entity type to delete
+ * @param  int           $id     Id of the entity
+ * @param  Slim          $app    Reference to slim application
+ * @param  EntityManager $em     Reference to entitymanager instance
+ */
+function delete($entity, $id, $app, $em) {
+    // Define JSON as response type
+    $response                 = $app->response();
+    $response['Content-Type'] = 'application/json';
+
+    $entity = $em->find($entity, (int) $id);
+    if ($entity) {
+        try {
+            $em->remove($entity);
+            $em->flush();
+            $response->body(json_encode(array('ok' => 'ok')));
+        } catch (Exception $ex) {
+            // Some internal failure
+            $response->status(500);
+            $response->body(json_encode(array("error" => array(
+                    'message'       => "Deletion failed"
+            ))));
+        }
+    } else {
+        // Entity not found, return default 404 error (File not found)
+        $response->status(404);
+        $response->body(json_encode(array("error" => array(
+                'message'       => "Was not found"
+        ))));
     }
 }
 
@@ -84,6 +118,10 @@ function change($call, $app, $em) {
     } else {
         // Callback is not a function
         $response->status(500);
+        $response->body(json_encode(array("error" => array(
+                'message'       => "Change failed",
+                'invalidFields' => array()
+        ))));
     }
 }
 
@@ -129,6 +167,11 @@ $app->post('/district/add/', function() use ($app, $em) {
 $app->put('/district/edit/', function() use ($app, $em) {
     change('Entities\District::edit', $app, $em);
 });
+
+$app->delete('/district/delete/:id', function($id) use ($app, $em) {
+    delete('Entities\District', (int) $id, $app, $em);
+});
+
 
 $app->post('/location/add/', function() use($app, $em) {
     change('Entities\Location::create', $app, $em);

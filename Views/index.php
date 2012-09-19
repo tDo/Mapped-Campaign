@@ -47,6 +47,7 @@
 
                 <button type="submit">Speichern</button>
                 <button type="reset">Abbrechen</button>
+                <button type="button" name="delete">Löschen</button>
             </fieldset>
         </form>
 
