@@ -54,24 +54,9 @@ class District extends Base implements \JsonSerializable {
      */
     protected $locations = null;
 
-    /**
-     *
-     * @OneToMany(targetEntity="Entities\PointOfInterest", mappedBy="pointOfInterests")
-     * @var Entities\PointOfInterest[]
-     */
-    protected $pointOfInterests = null;
-
-    /**
-     *
-     * @OneToMany(targetEntity="Entities\Building", mappedBy="buildings")
-     * @var Entities\buildings[]
-     */
-    protected $buildings = null;
 
     public function __construct() {
         $this->locations         = new ArrayCollection();
-        $this->pointsOfInterests = new ArrayCollection();
-        $this->buildings         = new ArrayCollection();
     }
 
     private static function assign($em, $data, $requiresDistrictId = false) {
@@ -184,20 +169,6 @@ class District extends Base implements \JsonSerializable {
     }
     public function addLocation($location) {
         $this->locations[] = $location;
-    }
-
-    public function getPointOfInterests() {
-        return $this->pointOfInterests;
-    }
-    public function addPointOfInterest($poi) {
-        $this->pointOfInterest[] = $poi;
-    }
-
-    public function getBuildings() {
-        return $this->buildings;
-    }
-    public function addBuilding($building) {
-        $this->buildings[] = $building;
     }
 
     public function jsonSerialize() {

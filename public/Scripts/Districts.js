@@ -194,13 +194,13 @@ Campaign.Districts = function(map) {
             $.get('district/'+ polygon.get('id'), function(data) {
                 $('#district_form input[name=name]').val(data.name);
                 $('#district_form textarea[name=description]').val(data.description);
-                $('#forms').show();
+                $('#district_form').show();
             }, 'json')
         } else {
             // A New one, just show the forms
             $('#district_form input[name=name]').val("");
             $('#district_form textarea[name=description]').val("");
-            $('#forms').show();
+            $('#district_form').show();
         }
     };
 
@@ -230,7 +230,7 @@ Campaign.Districts = function(map) {
         self.isEditing      = false;
         self.editingPolygon = null;
         self.originalPath   = null;
-        $('#forms').hide();
+        $('#district_form').hide();
     };
 
     /**
@@ -245,7 +245,7 @@ Campaign.Districts = function(map) {
             self.isEditing      = false;
             self.editingPolygon = null;
             self.originalPath   = null;
-            $('#forms').hide();
+            $('#district_form').hide();
         }
 
         if (self.editingPolygon.isNew()) {
@@ -317,7 +317,7 @@ Campaign.Districts = function(map) {
 
                     self.editingPolygon = null;
                     self.originalPath   = null;
-                    $('#forms').hide();
+                    $('#district_form').hide();
                 } else {
                     // Errors occured
                     alert(data.error.message);

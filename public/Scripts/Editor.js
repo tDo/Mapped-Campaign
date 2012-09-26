@@ -24,9 +24,7 @@ var Campaign = Campaign || {};
 var EditorModes = { None:                0,
                     Edit:                1,
                     AddDistrict:         2,
-                    AddLocation:         3,
-                    AddPointOfInterest:  4,
-                    AddBuilding:         5,
+                    AddLocation:         3
                   };
 
 /**
@@ -98,8 +96,6 @@ Campaign.Editor = function(map) {
                 break;
             // Locations, POIs, Buildings
             case EditorModes.AddLocation:
-            case EditorModes.AddPointOfInterest:
-            case EditorModes.AddBuilding:
                 drawingMode = google.maps.drawing.OverlayType.MARKER;
                 break;
             // Anything else is not allowed and we stop here

@@ -131,9 +131,7 @@ $app->get('/createSchema', function() use ($app, $em) {
         $em->getClassMetadata('Entities\Map'),
         $em->getClassMetadata('Entities\Region'),
         $em->getClassMetadata('Entities\District'),
-        $em->getClassMetadata('Entities\Location'),
-        $em->getClassMetadata('Entities\PointOfInterest'),
-        $em->getClassMetadata('Entities\Building')
+        $em->getClassMetadata('Entities\Location')
     );
 
     $tool->dropSchema($classes);
@@ -194,14 +192,6 @@ $app->delete('/district/delete/:id', function($id) use ($app, $em) {
 
 $app->post('/location/add/', function() use($app, $em) {
     change('Entities\Location::create', $app, $em);
-});
-
-$app->post('/pointofinterest/add/', function() use($app, $em) {
-    change('Entities\PointOfInterest::create', $app, $em);
-});
-
-$app->post('/building/add/', function() use($app, $em) {
-    change('Entities\Building::create', $app, $em);
 });
 
 // And finally run the application

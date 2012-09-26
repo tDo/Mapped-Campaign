@@ -35,30 +35,53 @@
         <div id="description"></div>
     </article>
 
-    <div id="forms">
 
-        <form id     = "district_form"
-              method = "post"
-              action = "#">
+    <form id     = "district_form"
+          class  = "edit_form"
+          method = "post"
+          action = "#">
 
-            <fieldset>
-                <legend>Lehen</legend>
+        <fieldset>
+            <legend>Lehen</legend>
 
-                <label>Name</label>
-                <input type  = "text"
-                       name  = "name"
-                       value = "" />
+            <label>Name</label>
+            <input type  = "text"
+                   name  = "name"
+                   value = "" />
 
-                <label>Beschreibung</label>
-                <textarea name = "description"></textarea>
+            <label>Beschreibung</label>
+            <textarea name = "description"></textarea>
 
-                <button type="submit">Speichern</button>
-                <button type="reset">Abbrechen</button>
-                <button type="button" name="delete">Löschen</button>
-            </fieldset>
-        </form>
+            <button type="submit">Speichern</button>
+            <button type="reset">Abbrechen</button>
+            <button type="button" name="delete">Löschen</button>
+        </fieldset>
+    </form>
 
-    </div>
+    <form id     = "location_form"
+          class  = "edit_form"
+          method = "post"
+          action = "#">
+
+        <fieldset>
+            <legend>Ort</legend>
+            <input type  = "hidden"
+                   name  = "district_id"
+                   value = "0" />
+
+            <label>Name</label>
+            <input type  = "text"
+                   name  = "name"
+                   value = "" />
+
+            <label>Beschreibung</label>
+            <textarea name = "description"></textarea>
+
+            <button type="submit">Speichern</button>
+            <button type="reset">Abbrechen</button>
+            <button type="button" name="delete">Löschen</button>
+        </fieldset>
+    </form>
 
 </body>
 </html>
