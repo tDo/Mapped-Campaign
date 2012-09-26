@@ -138,7 +138,12 @@ Campaign.Editor = function(map) {
     // Bind event which is fired when a polygon has been completed
     google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
         // Start editing the district
-        self.setMode(EditorModes.EditDistrict);
+        self.setMode(EditorModes.Edit);
         self.map.districts.edit(polygon);
+    });
+
+    // Bind event which is fire when a marker was placed
+    google.maps.event.addListener(drawingManager, 'markercomplete', function(marker) {
+        console.log(self.map.districts.getDistrictAt(marker.getPosition()));
     });
 }

@@ -128,6 +128,24 @@ Campaign.Districts = function(map) {
     };
 
     /**
+     * Function retrieve a LatLng Position instance
+     * and then checks the polygons of all known districts to
+     * retrieve the district the position is on.
+     * @param  {google.maps.LatLng} latLng Point on the map to check if it is in a specific district
+     * @return {google.maps.Polygon}       The district (Polygon) the position is on. Defaults to null if the point is on no district.
+     */
+    this.getDistrictAt = function(latLng) {
+        var l = polygons.getLength();
+        for (var i = 0; i < l; i++) {
+            var polygon = polygons.getAt(i);
+            if (google.maps.geometry.poly.containsLocation(latLng, polygon))
+                return polygon;
+        }
+            
+        return null;
+    }
+
+    /**
      * Adds a ditrict from storage to the map and already assigns all required data
      * @param {object} district Js Object recreated from parsed json
      */
