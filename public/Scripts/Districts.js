@@ -2,6 +2,7 @@
  * This file holds methods and classes used for district handling
  * like managing polygons and districts themselves
  */
+var Campaign = Campaign || {};
 
 /**
  * Converts a polygon to a json representation
@@ -53,7 +54,7 @@ String.prototype.toPolygon = function() {
  * and the correct actions on the api.
  * @param {Map} map The map handling instance
  */
-function Districts(map) {
+Campaign.Districts = function(map) {
     var self = this;
     this.map = map;
 

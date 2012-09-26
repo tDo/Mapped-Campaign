@@ -16,7 +16,7 @@
     // Initialization function when the document is ready
     $(document).ready(function () {
         // Create map instance and load the map
-        var map    = new Map(1, 'map');
+        var map    = new Campaign.Map(1, 'map');
     });
     </script>
 </head>

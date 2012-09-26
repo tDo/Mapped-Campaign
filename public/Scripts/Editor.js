@@ -3,6 +3,7 @@
  * and editing districts (And the polygons which describe them) and adding further
  * information to stored districts.
  */
+var Campaign = Campaign || {};
 
 /**
  * Holds a list of all available editor modes
@@ -41,7 +42,7 @@ var EditorModes = { None:                0,
  * 
  * @param {Map} map The outer map handler
  */
-function Editor(map) {
+Campaign.Editor = function(map) {
     var self = this;
     this.map = map;
 
