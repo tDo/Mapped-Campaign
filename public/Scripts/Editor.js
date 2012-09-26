@@ -15,21 +15,18 @@ var Campaign = Campaign || {};
  * This happens by applying a custom data-attribute to the element
  * e.g.
  *
- * <myElement data-editormode="None|AddDistrict|EditDistrict|...">..</myElement>
+ * <myElement data-editormode="None|Edit|AddDistrict|...">..</myElement>
  * 
  * The editor will then automatically bind the click event of that element.
  * Also when the mode is selected the css class "active" will be applied.
  * @type {Object}
  */
 var EditorModes = { None:                0,
-                    AddDistrict:         1,
-                    EditDistrict:        2,
+                    Edit:                1,
+                    AddDistrict:         2,
                     AddLocation:         3,
-                    EditLocation:        4,
-                    AddPointOfInterest:  5,
-                    EditPointOfInterest: 6,
-                    AddBuilding:         7,
-                    EditBuilding:        8
+                    AddPointOfInterest:  4,
+                    AddBuilding:         5,
                   };
 
 /**
@@ -92,25 +89,18 @@ Campaign.Editor = function(map) {
         switch (newMode) {
             // Reset mode to not editing
             case EditorModes.None:
+            case EditorModes.Edit:
                 drawingMode = null;
                 break;
             // District handling
             case EditorModes.AddDistrict:
                 drawingMode = google.maps.drawing.OverlayType.POLYGON;
                 break;
-            case EditorModes.EditDistrict:
-                drawingMode = null;
-                break;
             // Locations, POIs, Buildings
             case EditorModes.AddLocation:
             case EditorModes.AddPointOfInterest:
             case EditorModes.AddBuilding:
-                drawingMode = google.maps.drawing.OverlayType.MARKERS;
-                break;
-            case EditorModes.EditLocation:
-            case EditorModes.EditPointOfInterest:
-            case EditorModes.EditBuilding:
-                drawingMode = null;
+                drawingMode = google.maps.drawing.OverlayType.MARKER;
                 break;
             // Anything else is not allowed and we stop here
             default:

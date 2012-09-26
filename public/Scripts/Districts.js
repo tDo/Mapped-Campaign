@@ -52,17 +52,29 @@ String.prototype.toPolygon = function() {
  * District handler. Holds options to add, edit, delete and show districts
  * on the map. Will also make sure that the correct editors are called
  * and the correct actions on the api.
- * @param {Map} map The map handling instance
+ * @param {Campaign.Map} map The map handling instance
  */
 Campaign.Districts = function(map) {
-    var self = this;
-    this.map = map;
+    var self     = this;
+    var polygons = new google.maps.MVCArray();
+    this.map     = map;
 
-    // Function handles "Adding polygons to the map"
-    // This might be done with existing or new polygons likewise
-    // exisiting polygons just retrieve event resets
-    // Also the styles of the polygons will be applied here
-    this.addPolygon = function(polygon) {
+    /**
+     * Private function which tries to find a specific polygon in
+     * the list of stored polygon references
+     * @param  {google.maps.Polygon} polygon Polygon to find
+     * @return {integer}                     Index of the polygon when present. Defaults to -1 when not found
+     */
+    var indexOfPolygon = function(polygon) {
+        return polygons.getArray().indexOf(polygon);
+    }
+
+    /**
+     * Add a polygon to the map and the internal storage array. Also assigns
+     * handling events to the added polygon
+     * @param {google.maps.Polygon} polygon The polygon to add to the map
+     */
+    var addPolygon = function(polygon) {
         // Clear all listeners beforehand
         google.maps.event.clearInstanceListeners(polygon);
 
@@ -81,7 +93,7 @@ Campaign.Districts = function(map) {
         google.maps.event.addListener(polygon, 'click', function() {
             if (!self.map.editor.isEditing())
                 // Only edit if we are in district editing mode
-                if (self.map.editor.getMode() == EditorModes.EditDistrict)
+                if (self.map.editor.getMode() == EditorModes.Edit)
                     // We are in editing mode for districts, show editor
                     self.edit(polygon);
                 else if (self.map.editor.getMode() == EditorModes.None) {
@@ -98,10 +110,27 @@ Campaign.Districts = function(map) {
         polygon.set('fillColor',     '#000');
         polygon.set('fillOpacity',   0.05);
 
+        removePolygon(polygon);
+        polygons.push(polygon);
         polygon.setMap(self.map.map);
     };
 
-    // Adds a ditrict from storage to the map and already assigns all required data
+    /**
+     * Removes a polygon from the map and the internal storage list
+     * @param  {google.maps.Polygon} polygon The polygon to remove
+     */
+    var removePolygon = function(polygon) {
+        polygon.setMap(null);
+        var index = indexOfPolygon(polygon);
+
+        if (index > -1)
+            polygons.removeAt(index);
+    };
+
+    /**
+     * Adds a ditrict from storage to the map and already assigns all required data
+     * @param {object} district Js Object recreated from parsed json
+     */
     this.add = function(district) {
         // verify the data structure a bit
         if (district == undefined) return false;
@@ -112,16 +141,19 @@ Campaign.Districts = function(map) {
         polygon.set('id',   district.id);
         polygon.set('name', district.name);
 
-        self.addPolygon(polygon);
+        addPolygon(polygon);
     };
 
     this.editing        = false;
     this.editingPolygon = null;
     this.originalPath   = null;
 
-    // Will start editing a polygon
-    // Editing may be "editing of a new district" or "editing of an existant district"
-    // this is based on the data stored for the given polygon
+    /**
+     * Will start editing a polygon
+     * Editing may be "editing of a new district" or "editing of an existant district"
+     * this is based on the data stored for the given polygon
+     * @param  {google.maps.Polygon} polygon The polygon which shall be edited
+     */
     this.edit = function(polygon) {
         // If we are already editing something or the provided polygon is invalid, stop right here
         if (polygon == undefined) return false;
@@ -154,9 +186,11 @@ Campaign.Districts = function(map) {
         }
     };
 
-    // Cancels the editing process
-    // In case a new district was currently being created the polygon will be removed from the map.
-    // Also the forms will be hidden and any changes made just be reset
+    /**
+     * Cancels the editing process
+     * In case a new district was currently being created the polygon will be removed from the map.
+     * Also the forms will be hidden and any changes made just be reset
+     */
     this.cancel = function() {
         if (!self.isEditing) return false;
 
@@ -165,13 +199,13 @@ Campaign.Districts = function(map) {
             self.editingPolygon.setEditable(false);
             // If this is a new polygon, also remove it from the map
             if (self.editingPolygon.isNew()) {
-                self.editingPolygon.setMap(null);
+                removePolygon(self.editingPolygon);
             } else {
                 // If not, restore the path
                 if (self.originalPath)
                     self.editingPolygon.setPath(self.originalPath);
                 // And readd the polygon
-                self.addPolygon(self.editingPolygon);
+                addPolygon(self.editingPolygon);
             }
         }
 
@@ -181,13 +215,15 @@ Campaign.Districts = function(map) {
         $('#forms').hide();
     };
 
-    // Delete the currently edited polygon/district
+    /**
+     * Delete the currently edited polygon/district
+     */
     this.delete = function() {
         if (!self.isEditing || !self.editingPolygon) return false;
 
         // Small closure handler to call when the process is done
         var done = function() {
-            self.editingPolygon.setMap(null);
+            removePolygon(self.editingPolygon);
             self.isEditing      = false;
             self.editingPolygon = null;
             self.originalPath   = null;
@@ -259,7 +295,7 @@ Campaign.Districts = function(map) {
                     // Update the entity infos for the polygon
                     self.editingPolygon.set('id',   data.entity.id);
                     self.editingPolygon.set('name', data.entity.name);
-                    self.addPolygon(self.editingPolygon);
+                    addPolygon(self.editingPolygon);
 
                     self.editingPolygon = null;
                     self.originalPath   = null;

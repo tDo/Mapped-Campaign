@@ -23,8 +23,9 @@
 <body>
     <ul id="editor_controls">
         <li data-editormode="None">Default</li>
+        <li data-editormode="Edit">Edit</li>
         <li data-editormode="AddDistrict">Add district</li>
-        <li data-editormode="EditDistrict">Edit district</li>
+        <li data-editormode="AddLocation">Add Location</li>
     </ul>
 
     <div id="map"></div>

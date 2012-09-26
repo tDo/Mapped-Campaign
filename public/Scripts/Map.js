@@ -118,7 +118,7 @@ Campaign.CustomMapType = function(tilesPath) {
  * as well as a container element in the dom and create a new instance of the class
  *
  * @param {Integer}    mapId             Id of the map (As stored in the database)
- * @param {String} mapContainerDomId DOM-Element id of the map container
+ * @param {String}     mapContainerDomId DOM-Element id of the map container
  */
 Campaign.Map = function(mapId, mapContainerDomId) {
     // Reference to self for context
