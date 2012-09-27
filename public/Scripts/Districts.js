@@ -240,6 +240,9 @@ Campaign.Districts = function(map) {
 
         // Small closure handler to call when the process is done
         var done = function() {
+            // Remove all markers in this district
+            self.map.locations.removeLocationsInDistrict(editingPolygon);
+            
             removePolygon(editingPolygon);
             self.isEditing = false;
             editingPolygon = null;

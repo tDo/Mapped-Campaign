@@ -66,8 +66,6 @@ Campaign.Locations = function(map) {
             }
         });
 
-        
-
         removeMarker(marker);
         markers.push(marker);
         marker.setMap(self.map.map);
@@ -105,8 +103,25 @@ Campaign.Locations = function(map) {
 
         marker.set('id', location.id);
         marker.set('name', location.name);
+        marker.set('district', district);
 
         addMarker(marker);
+    };
+
+    this.removeLocationsInDistrict = function(district) {
+        if (district == undefined) return false;
+        // First collect all markers
+        var inDistrict = [];
+        var l = markers.getLength();
+        for (var i = 0; i < l; i++) {
+            var marker = markers.getAt(i);
+            if (marker.get('district') == district)
+                inDistrict.push(marker);
+        }
+
+        $.each(inDistrict, function(iloc, location) {
+            removeMarker(location);
+        });
     };
 
     this.edit = function(marker) {
@@ -252,6 +267,7 @@ Campaign.Locations = function(map) {
                 // Update entity infos for the marker
                 editingMarker.set('id', data.entity.id);
                 editingMarker.set('name', data.entity.name);
+                editingMarker.set('district', district);
                 addMarker(editingMarker);
 
                 editingMarker    = null;
