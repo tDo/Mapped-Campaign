@@ -24,9 +24,9 @@ class LocationType {
      * @return int[] Array of all location types
      */
     public static function toArray() {
-        return array(LocationType::Location,
-                     LocationType::Building,
-                     LocationType::PointOfInterest);
+        return array((string) LocationType::Location,
+                     (string) LocationType::Building,
+                     (string) LocationType::PointOfInterest);
     }
 
     /**
@@ -98,7 +98,8 @@ class Location extends Base implements \JsonSerializable {
         $filter->addSoftRule('description', $filter::IS, 'strlenMin', 1);
 
         // A type must be present and in the allowed location type values
-        //$filter->addSoftRule('type', $filter::IS, 'inValues', LocationType::toArray());
+        $filter->addSoftRule('type', $filter::IS, 'int');
+        $filter->addSoftRule('type', $filter::IS, 'inValues', LocationType::toArray());
 
         // A location as x/y coordinates must be given
         $filter->addSoftRule('x', $filter::IS, 'float');
@@ -197,7 +198,7 @@ class Location extends Base implements \JsonSerializable {
 
     public function setType($type) {
         if (LocationType::isValid($type))
-            $this->type = $type;
+            $this->type = (int) $type;
     }
 
     public function getType() {
