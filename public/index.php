@@ -194,5 +194,13 @@ $app->post('/location/add/', function() use($app, $em) {
     change('Entities\Location::create', $app, $em);
 });
 
+$app->put('/location/edit/', function() use($app, $em) {
+    change('Entities\Location::edit', $app, $em);
+});
+
+$app->delete('/location/delete/:id', function($id) use($app, $em) {
+    delete('Entities\Location', (int) $id, $app, $em);
+});
+
 // And finally run the application
 $app->run();
