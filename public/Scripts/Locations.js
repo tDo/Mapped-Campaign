@@ -92,12 +92,11 @@ Campaign.Locations = function(map) {
         if (location.id == undefined || location.name == undefined ||
             location.x == undefined  || location.y == undefined) return false;
 
+        // Verify that the position is on the district it's supposed to be on
         var pos      = new google.maps.LatLng(location.y, location.x);
-        // TODO: Check if we can find a way to wait for the google maps api to be completely loaded so we can do district
-        // checks here as well
-        //var district = self.map.districts.getDistrictAt(pos);
-        //if (district == undefined) return false;
-        //if (district.get('id') != districtId) return false;
+        var district = self.map.districts.getDistrictAt(pos);
+        if (district == undefined) return false;
+        if (district.get('id') != districtId) return false;
 
         var marker = new google.maps.Marker({
             position:  pos,

@@ -8,7 +8,7 @@
 
     <script type="text/javascript" src="scripts/less-1.3.0.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry,drawing"></script>
     <script type="text/javascript" src="scripts/Districts.js"></script>
     <script type="text/javascript" src="scripts/Locations.js"></script>
     <script type="text/javascript" src="scripts/Map.js"></script>
