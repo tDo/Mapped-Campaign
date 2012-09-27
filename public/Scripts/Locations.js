@@ -139,7 +139,27 @@ Campaign.Locations = function(map) {
     };
 
     this.cancel = function() {
-        // To be done...
+        // make sure that we are editing
+        if (!self.isEditing) return false;
+
+        if (editingMarker) {
+            // If it is a new marker, just remove it
+            if (editingMarker.isNew()) {
+                removeMarker(editingMarker);
+            } else {
+                // If it is not new, restore old position
+                editingMarker.setPosition(originalPosition);
+                // And readd the marker
+                addMarker(editingMarker);
+            }
+        }
+
+        // Finally reset the editing status
+        self.isEditing   = false;
+        editingMarker    = null;
+        originalPosition = null;
+        setDraggable(true);
+        $('#location_form').hide();
     };
 
     this.delete = function() {
@@ -219,5 +239,11 @@ Campaign.Locations = function(map) {
         });
 
         return false;
+    });
+
+// Bind to reset handler
+    $('#location_form').on('reset', function() {
+        // And just call the cancel procedure
+        self.cancel();
     });
 }
