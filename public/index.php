@@ -190,6 +190,10 @@ $app->delete('/district/delete/:id', function($id) use ($app, $em) {
 });
 
 
+$app->get('/location/:id', function($id) use ($app, $em) {
+    get('Entities\Location', (int) $id, true, $app, $em);
+});
+
 $app->post('/location/add/', function() use($app, $em) {
     change('Entities\Location::create', $app, $em);
 });

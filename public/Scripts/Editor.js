@@ -50,7 +50,7 @@ Campaign.Editor = function(map) {
 
     // Create the drawing manager for shape drawing options
     var drawingManager = new google.maps.drawing.DrawingManager({
-        drawingMode:    null,//google.maps.drawing.OverlayType.POLYGON,
+        drawingMode:    null,
         drawingControl: false,
         markerOptions: {
             draggable: true
@@ -66,7 +66,8 @@ Campaign.Editor = function(map) {
 
     // Function will check for all bound handlers if any of them is currently in editing mode
     this.isEditing = function() {
-        return self.map.districts.isEditing;
+        if (self.map.districts == undefined || self.map.locations.isEditing == undefined) return true;
+        return self.map.districts.isEditing || self.map.locations.isEditing;
     };
 
     // Holds a reference to all editormode controls (Which can be used to change the mode)
@@ -116,6 +117,8 @@ Campaign.Editor = function(map) {
             if (EditorModes[key] == mode)
                 $(element).addClass('active');
         });
+
+        google.maps.event.trigger(self, 'mode_changed');
     };
 
     // Bind the editor mode controls
@@ -140,6 +143,15 @@ Campaign.Editor = function(map) {
 
     // Bind event which is fire when a marker was placed
     google.maps.event.addListener(drawingManager, 'markercomplete', function(marker) {
-        console.log(self.map.districts.getDistrictAt(marker.getPosition()));
+        // Was it a valid position to begin with?
+        if (!self.map.locations.isValidDropPosition(marker.getPosition())) {
+            console.log("Oh no, not this way my dear friend!");
+            marker.setMap(null);
+            return false;
+        }
+
+        // Seems like a valid position, start editing
+        self.setMode(EditorModes.Edit);
+        self.map.locations.edit(marker);
     });
 }

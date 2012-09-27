@@ -49,7 +49,7 @@ class District extends Base implements \JsonSerializable {
 
     /**
      *
-     * @OneToMany(targetEntity="Entities\Location", mappedBy="locations")
+     * @OneToMany(targetEntity="Entities\Location", mappedBy="district")
      * @var Entities\Location[]
      */
     protected $locations = null;
@@ -175,7 +175,8 @@ class District extends Base implements \JsonSerializable {
         $result = array(
             "id"        => $this->getId(),
             "name"      => $this->getName(),
-            "polygon" => $this->getPolygon()        
+            "polygon"   => $this->getPolygon(),
+            "locations" => $this->getLocations()->toArray()
         );
 
         if ($this->getFullySerialize())

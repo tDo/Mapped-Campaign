@@ -200,8 +200,13 @@ Campaign.Map = function(mapId, mapContainerDomId) {
     // Initialize the actual map
     this.map       = new google.maps.Map(document.getElementById(mapContainerDomId), mapOptions);
 
+    // Add the editor
+    this.editor = new Campaign.Editor(self);
+
     // Create the districts instance
     this.districts = new Campaign.Districts(this);
+    // and the locations instance
+    this.locations = new Campaign.Locations(this);
 
     // Do a map retrieval callback via jquery ajax call and then handle the returned data
     // by filling up the map.
@@ -224,6 +229,12 @@ Campaign.Map = function(mapId, mapContainerDomId) {
                     $.each(region.districts, function(idis, district) {
                         // Add the district to the map
                         self.districts.add(district);
+                        // And handle the locations for this district
+                        if (district.locations != undefined)
+                            $.each(district.locations, function(iloc, location) {
+                                // Add the location to the map
+                                self.locations.add(district.id, location);
+                            });
                     });
             });
         }
@@ -239,8 +250,6 @@ Campaign.Map = function(mapId, mapContainerDomId) {
 
         // And bind the center changed event to the bounds check to keep the map in place
         google.maps.event.addListener(self.map, 'center_changed', function() { self.checkBounds(); });
-
-        // And finally create the editor instance
-        self.editor = new Campaign.Editor(self);
+        
     }, 'json');
 }

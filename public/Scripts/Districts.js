@@ -55,9 +55,12 @@ String.prototype.toPolygon = function() {
  * @param {Campaign.Map} map The map handling instance
  */
 Campaign.Districts = function(map) {
-    var self     = this;
-    var polygons = new google.maps.MVCArray();
-    this.map     = map;
+    var self           = this;
+    var polygons       = new google.maps.MVCArray();
+    this.map           = map;
+    this.isEditing     = false;
+    var editingPolygon = null;
+    var originalPath   = null;
 
     /**
      * Private function which tries to find a specific polygon in
@@ -92,9 +95,9 @@ Campaign.Districts = function(map) {
         // On click select for editing (If currently no other one is being editied)
         google.maps.event.addListener(polygon, 'click', function() {
             if (!self.map.editor.isEditing())
-                // Only edit if we are in district editing mode
+                // Only edit if we are in editing mode
                 if (self.map.editor.getMode() == EditorModes.Edit)
-                    // We are in editing mode for districts, show editor
+                    // We are in editing mode, show editor
                     self.edit(polygon);
                 else if (self.map.editor.getMode() == EditorModes.None) {
                     // Default mode, show infos
@@ -162,10 +165,6 @@ Campaign.Districts = function(map) {
         addPolygon(polygon);
     };
 
-    this.editing        = false;
-    this.editingPolygon = null;
-    this.originalPath   = null;
-
     /**
      * Will start editing a polygon
      * Editing may be "editing of a new district" or "editing of an existant district"
@@ -177,8 +176,8 @@ Campaign.Districts = function(map) {
         if (polygon == undefined) return false;
         if (self.map.editor.isEditing()) return false;
 
-        self.isEditing      = true;
-        self.editingPolygon = polygon;
+        self.isEditing = true;
+        editingPolygon = polygon;
         polygon.setEditable(true);
 
         // Is this a new one or an existing polygon...
@@ -188,7 +187,7 @@ Campaign.Districts = function(map) {
             // Yes this is done by a conversion in between since else the points would be handled
             // by reference which means that they hold all translations made. This way we get a clean
             // copy.
-            self.originalPath = polygon.toJson().toPolygon().getPath();
+            originalPath = polygon.toJson().toPolygon().getPath();
 
             // Load the data to show
             $.get('district/'+ polygon.get('id'), function(data) {
@@ -212,24 +211,24 @@ Campaign.Districts = function(map) {
     this.cancel = function() {
         if (!self.isEditing) return false;
 
-        if (self.editingPolygon) {
+        if (editingPolygon) {
             // Reset editing mode
-            self.editingPolygon.setEditable(false);
+            editingPolygon.setEditable(false);
             // If this is a new polygon, also remove it from the map
-            if (self.editingPolygon.isNew()) {
-                removePolygon(self.editingPolygon);
+            if (editingPolygon.isNew()) {
+                removePolygon(editingPolygon);
             } else {
                 // If not, restore the path
-                if (self.originalPath)
-                    self.editingPolygon.setPath(self.originalPath);
+                if (originalPath)
+                    editingPolygon.setPath(originalPath);
                 // And readd the polygon
-                addPolygon(self.editingPolygon);
+                addPolygon(editingPolygon);
             }
         }
 
-        self.isEditing      = false;
-        self.editingPolygon = null;
-        self.originalPath   = null;
+        self.isEditing = false;
+        editingPolygon = null;
+        originalPath   = null;
         $('#district_form').hide();
     };
 
@@ -237,25 +236,25 @@ Campaign.Districts = function(map) {
      * Delete the currently edited polygon/district
      */
     this.delete = function() {
-        if (!self.isEditing || !self.editingPolygon) return false;
+        if (!self.isEditing || !editingPolygon) return false;
 
         // Small closure handler to call when the process is done
         var done = function() {
-            removePolygon(self.editingPolygon);
-            self.isEditing      = false;
-            self.editingPolygon = null;
-            self.originalPath   = null;
+            removePolygon(editingPolygon);
+            self.isEditing = false;
+            editingPolygon = null;
+            originalPath   = null;
             $('#district_form').hide();
         }
 
-        if (self.editingPolygon.isNew()) {
+        if (editingPolygon.isNew()) {
             // A new entry must just be removed from the map
             done();
         } else {
             // If the entry is not new, we must tell the server so
             $.ajax({
                 type:     'DELETE',
-                url:      'district/delete/'+ self.editingPolygon.get('id'),
+                url:      'district/delete/'+ editingPolygon.get('id'),
                 dataType: 'json'
             }).done(function(data) {
                 if (data.ok == "ok") {
@@ -272,10 +271,10 @@ Campaign.Districts = function(map) {
     // Bind to save event of the editing form, so we can submit the data
     $('#district_form').on('submit', function() {
         // Just stop here is we are not editing anything
-        if (!self.isEditing || !self.editingPolygon) return false;
+        if (!self.isEditing || !editingPolygon) return false;
 
         // Stop editing mode
-        self.editingPolygon.setEditable(false);
+        editingPolygon.setEditable(false);
 
         // Serialize the form data
         var data = {};
@@ -287,17 +286,17 @@ Campaign.Districts = function(map) {
         data.region_id = 1;
 
         // And serialize the polygon
-        data.polygon   = self.editingPolygon.toJson();
+        data.polygon   = editingPolygon.toJson();
 
         // Based on wether this is an existant district or a new one
         // the url as well as the parameters will change
         var type = 'POST';
         var url  = 'district/add/';
-        if (!self.editingPolygon.isNew()) {
+        if (!editingPolygon.isNew()) {
             // Not a new one: Editing
             type             = "PUT";
             url              = 'district/edit/';
-            data.district_id = self.editingPolygon.get('id');
+            data.district_id = editingPolygon.get('id');
         }
 
         $.ajax({
@@ -311,12 +310,12 @@ Campaign.Districts = function(map) {
                     self.isEditing      = false;
 
                     // Update the entity infos for the polygon
-                    self.editingPolygon.set('id',   data.entity.id);
-                    self.editingPolygon.set('name', data.entity.name);
-                    addPolygon(self.editingPolygon);
+                    editingPolygon.set('id',   data.entity.id);
+                    editingPolygon.set('name', data.entity.name);
+                    addPolygon(editingPolygon);
 
-                    self.editingPolygon = null;
-                    self.originalPath   = null;
+                    editingPolygon = null;
+                    originalPath   = null;
                     $('#district_form').hide();
                 } else {
                     // Errors occured

@@ -10,6 +10,7 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
     <script type="text/javascript" src="scripts/Districts.js"></script>
+    <script type="text/javascript" src="scripts/Locations.js"></script>
     <script type="text/javascript" src="scripts/Map.js"></script>
     <script type="text/javascript" src="scripts/Editor.js"></script>
     <script type="text/javascript">
@@ -65,9 +66,6 @@
 
         <fieldset>
             <legend>Ort</legend>
-            <input type  = "hidden"
-                   name  = "district_id"
-                   value = "0" />
 
             <label>Name</label>
             <input type  = "text"

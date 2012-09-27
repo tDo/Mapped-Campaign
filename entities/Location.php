@@ -65,7 +65,7 @@ class Location extends Base implements \JsonSerializable {
     protected $type;
 
     /**
-     * @ManyToOne(targetEntity="Entities\Region", inversedBy="locations")
+     * @ManyToOne(targetEntity="Entities\District", inversedBy="locations")
      * @JoinColumn(name="district_id", referencedColumnName="id", onDelete="CASCADE")
      * @var Entities\District
      */
@@ -98,7 +98,7 @@ class Location extends Base implements \JsonSerializable {
         $filter->addSoftRule('description', $filter::IS, 'strlenMin', 1);
 
         // A type must be present and in the allowed location type values
-        $filter->addSoftRule('type', $filter::IS, 'inValues', LocationType::toArray());
+        //$filter->addSoftRule('type', $filter::IS, 'inValues', LocationType::toArray());
 
         // A location as x/y coordinates must be given
         $filter->addSoftRule('x', $filter::IS, 'float');
@@ -213,11 +213,11 @@ class Location extends Base implements \JsonSerializable {
 
     public function jsonSerialize() {
         $result = array(
-            "id"    => $this->getId(),
-            "name"  => $this->getName(),
-            "type"  => $this->getType(),
-            "x"     => $this->getX(),
-            "y"     => $this->getY()     
+            "id"          => $this->getId(),
+            "name"        => $this->getName(),
+            "type"        => $this->getType(),
+            "x"           => $this->getX(),
+            "y"           => $this->getY()     
         );
 
         if ($this->getFullySerialize())
