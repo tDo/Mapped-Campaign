@@ -163,7 +163,37 @@ Campaign.Locations = function(map) {
     };
 
     this.delete = function() {
-        // To be done...
+        if (!self.isEditing || !editingMarker) return false;
+
+        // Small closure handler to call when the process is done
+        var done = function() {
+            removeMarker(editingMarker);
+            self.isEditing   = false;
+            editingMarker    = null;
+            originalPosition = null;
+            setDraggable(true);
+            $('#location_form').hide();
+        }
+
+        if (editingMarker.isNew()) {
+            // A new entry must just be removed from the map
+            done();
+        } else {
+            // If the entry is not new, we must tell the server so
+            $.ajax({
+                type:     'DELETE',
+                url:      'location/delete/'+ editingMarker.get('id'),
+                dataType: 'json'
+            }).done(function(data) {
+                if (data.ok == "ok") {
+                    // Deleted and done
+                    done();
+                } else {
+                    // Something went wrong...
+                    alert(data.error.message);
+                }
+            })
+        }
     };
 
     // Bind to save event of the editing form, so we can submit the data
@@ -241,9 +271,14 @@ Campaign.Locations = function(map) {
         return false;
     });
 
-// Bind to reset handler
+    // Bind to reset handler
     $('#location_form').on('reset', function() {
         // And just call the cancel procedure
         self.cancel();
+    });
+
+    // Bind to delete handler
+    $('#location_form *[name=delete]').on('click', function() {
+        self.delete();
     });
 }

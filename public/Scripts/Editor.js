@@ -64,9 +64,14 @@ Campaign.Editor = function(map) {
         map:              map.map
     });
 
+    this.isReady = function() {
+        return self.map.districts != undefined &&
+               self.map.locations != undefined;
+    };
+
     // Function will check for all bound handlers if any of them is currently in editing mode
     this.isEditing = function() {
-        if (self.map.districts == undefined || self.map.locations.isEditing == undefined) return true;
+        if (!self.isReady()) return false;
         return self.map.districts.isEditing || self.map.locations.isEditing;
     };
 
