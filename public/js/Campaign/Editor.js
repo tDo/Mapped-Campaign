@@ -119,8 +119,12 @@ Campaign.Editor = function(map) {
         controls.each(function(idx, element) {
             $(element).removeClass('active');
             var key = $(element).attr("data-editormode");
-            if (EditorModes[key] == mode)
+            if (EditorModes[key] == mode) {
                 $(element).addClass('active');
+
+                // TODO: Replace this with a better caption handler
+                $('.editorcaption').text(key);
+            }
         });
 
         google.maps.event.trigger(self, 'mode_changed');

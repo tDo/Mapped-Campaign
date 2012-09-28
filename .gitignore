@@ -36,4 +36,4 @@ Configs/*
 !Configs/default.json
 
 # Ignore the map images
-public/Images/Maps/**/*
+public/img/maps/**/*

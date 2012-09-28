@@ -215,7 +215,7 @@ Campaign.Map = function(mapId, mapContainerDomId) {
         if (data.path == undefined) return;
 
         // Create the custom map type and apply our projection
-        var cMap        = new Campaign.CustomMapType('images/maps/'+ data.path +'/');
+        var cMap        = new Campaign.CustomMapType('img/maps/'+ data.path +'/');
         cMap.projection = new Campaign.FiftyProjection();
 
         // And set is as the map type
