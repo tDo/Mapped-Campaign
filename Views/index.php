@@ -11,6 +11,7 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry,drawing"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/Campaign/Messages.js"></script>
     <script src="js/Campaign/Districts.js"></script>
     <script src="js/Campaign/Locations.js"></script>
     <script src="js/Campaign/Map.js"></script>
@@ -25,7 +26,9 @@
 </head>
 <body>
     
-
+    <div id="alerts">
+    </div>
+    
 
     <div class="container-fluid">
         <div class="row-fluid">
@@ -60,6 +63,12 @@
 
             <div id    = "sidebar"
                  class = "span3">
+
+                <!-- Content container for actually displaying stored data -->
+                <div id="content">
+                  <h1 id="content_name"></h1>
+                  <p id="content_description"></p>
+                </div>
 
                 <!-- Form for adding/editing districts -->
                 <form id     = "district_form"

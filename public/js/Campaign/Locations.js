@@ -50,8 +50,11 @@ Campaign.Locations = function(map) {
                     
                 } else if (self.map.editor.getMode() == EditorModes.None) {
                     // Default mode, show infos
-                    console.log("Name: "+ marker.get("name"));
-                    console.log("Id: "+ marker.get("id"));
+                    $.get('location/'+ marker.get('id'), function(data) {
+                        $('#content #content_name').text(data.name);
+                        $('#content #content_description').text(data.description);
+                        $('#content').show();
+                    }, 'json');
                 }
             }
         });
@@ -61,7 +64,8 @@ Campaign.Locations = function(map) {
             var district = self.map.districts.getDistrictAt(marker.getPosition());
             console.log(self.isEditing);
             if (district == undefined || !self.isEditing) {
-                console.log("Oh noe, not here! TODO: Real messge to user!");
+
+                Campaign.Messages.addError('Kein Lehen!', 'Orte können nur innerhalb von Lehen eingetragen werden');
                 args.stop();
             }
         });
@@ -125,6 +129,8 @@ Campaign.Locations = function(map) {
     };
 
     this.edit = function(marker) {
+        $('#content').hide();
+
         // Check some of the preconditions
         if (marker == undefined) return false;
         if (self.map.editor.getMode() != EditorModes.Edit) return false;
@@ -201,10 +207,12 @@ Campaign.Locations = function(map) {
             }).done(function(data) {
                 if (data.ok == "ok") {
                     // Deleted and done
+                    Campaign.Messages.addSuccess('Ort gelöscht', 'Die Ortschaft wurde erfolgreich entfernt');
                     done();
                 } else {
                     // Something went wrong...
-                    alert(data.error.message);
+                    Campaign.Messages.addSuccess('Fehlgeschlagen', 'Die Ortschaft konnte nicht entfernt werden');
+                    //alert(data.error.message);
                 }
             })
         }
@@ -232,11 +240,11 @@ Campaign.Locations = function(map) {
         var district = self.map.districts.getDistrictAt(pos);
         // No district at all
         if (district == undefined) {
-            console.log("Oh noes, no district");
+            Campaign.Messages.addError('Kein Lehen!', 'Orte können nur innerhalb von Lehen eingetragen werden');
             return false;
         }
         if (district.isNew()) {
-            console.log("Oh noes, no district id");
+            Campaign.Messages.addError('Kein Lehen!', 'Orte können nur innerhalb von gespeicherten Lehen eingetragen werden');
             return false;
         }
 
@@ -276,9 +284,12 @@ Campaign.Locations = function(map) {
 
                 // And enable all markers for drag&drop again
                 setDraggable(true);
+
+                Campaign.Messages.addSuccess('Gespeichert!', 'Ortschaft wurde erfolgreich gespeichert');
             } else {
                 // Errors occured
-                alert(data.error.message);
+                Campaign.Messages.addError('Fehlgeschlagen!', 'Ortschaft konnte nicht gespeichert werden');
+                //alert(data.error.message);
                 // TODO: Some further handling would be nice
             }
         });

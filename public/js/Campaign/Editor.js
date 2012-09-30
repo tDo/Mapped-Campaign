@@ -154,7 +154,7 @@ Campaign.Editor = function(map) {
     google.maps.event.addListener(drawingManager, 'markercomplete', function(marker) {
         // Was it a valid position to begin with?
         if (!self.map.locations.isValidDropPosition(marker.getPosition())) {
-            console.log("Oh no, not this way my dear friend!");
+            Campaign.Messages.addError('Kein Lehen!', 'Orte können nur innerhalb von Lehen eingetragen werden');
             marker.setMap(null);
             return false;
         }

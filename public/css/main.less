@@ -10,6 +10,19 @@ body {
     padding : 0;
     background-color: #fff;
 
+    #alerts {
+        position: fixed;
+
+        width:  50%;
+        height: auto;
+        left:   25%;
+        top:    41px;
+        z-index: 10;
+        background-color: rgba(0, 0, 0, 0.25);
+        border-radius: 5px;
+        .alert { margin: 10px; }
+    }
+
 	// Styles for the map itsself
 	#map_canvas {
         width     : 100%;
@@ -25,7 +38,7 @@ body {
     }
 
     // Styles for the content container as well as basic forms
-    .edit_form {
+    #content, .edit_form {
         display  : none;
     }
 }

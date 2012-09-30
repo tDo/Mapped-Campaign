@@ -101,8 +101,12 @@ Campaign.Districts = function(map) {
                     self.edit(polygon);
                 else if (self.map.editor.getMode() == EditorModes.None) {
                     // Default mode, show infos
-                    console.log("Name: "+ polygon.get("name"));
-                    console.log("Id: "+ polygon.get("id"));
+                    $.get('district/'+ polygon.get('id'), function(data) {
+                        $('#content #content_name').text(data.name);
+                        $('#content #content_description').text(data.description);
+                        $('#content').show();
+                    }, 'json');
+
                 }
         });
 
@@ -172,6 +176,8 @@ Campaign.Districts = function(map) {
      * @param  {google.maps.Polygon} polygon The polygon which shall be edited
      */
     this.edit = function(polygon) {
+        $('#content').hide();
+
         // If we are already editing something or the provided polygon is invalid, stop right here
         if (polygon == undefined) return false;
         if (self.map.editor.isEditing()) return false;
@@ -263,9 +269,10 @@ Campaign.Districts = function(map) {
                 if (data.ok == "ok") {
                     // Deleted and done
                     done();
+                    Campaign.Messages.addSuccess('Eintrag gelöscht', 'Der Eintrag wurde erfolgreich gelöscht');
                 } else {
                     // Something went wrong...
-                    alert(data.error.message);
+                    Campaign.Messages.addError('Löschen fehlgeschlagen', data.error.message);          
                 }
             })
         }
@@ -320,9 +327,10 @@ Campaign.Districts = function(map) {
                     editingPolygon = null;
                     originalPath   = null;
                     $('#district_form').hide();
+                    Campaign.Messages.addSuccess('Eintrag gespeichert', 'Der Eintrag wurde erfolgreich gespeichert');
                 } else {
                     // Errors occured
-                    alert(data.error.message);
+                    Campaign.Messages.addError('Speichern fehlgeschlagen', 'Der Eintrag konnte so nicht übernommen werden!');
                     // TODO: Some field highlighting would be nice...
                 }
             });
