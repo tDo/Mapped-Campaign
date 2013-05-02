@@ -41,8 +41,8 @@
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.2",
-            "doctrine/common": ">=2.2.0,<=2.2.99"
+            "doctrine/common": ">=2.2.0,<=2.2.99",
+            "php": ">=5.3.2"
         },
         "type": "library",
         "installation-source": "dist",
@@ -68,10 +68,10 @@
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.2",
-            "ext-pdo": "*",
             "doctrine/common": ">=2.2.0,<2.2.99",
-            "doctrine/dbal": ">=2.2.1,<2.2.99"
+            "doctrine/dbal": ">=2.2.1,<2.2.99",
+            "ext-pdo": "*",
+            "php": ">=5.3.2"
         },
         "type": "library",
         "installation-source": "dist",
@@ -135,31 +135,101 @@
         }
     },
     {
+        "name": "aura/installer-default",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/auraphp/installer-default",
+            "reference": "1.0.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/auraphp/installer-default/archive/1.0.0.zip",
+            "reference": "1.0.0",
+            "shasum": ""
+        },
+        "time": "2012-11-26 21:35:57",
+        "type": "composer-installer",
+        "extra": {
+            "class": "Aura\\Composer\\DefaultInstaller"
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Aura\\Composer\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-2-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Paul M. Jones",
+                "email": "pmjones88@gmail.com",
+                "homepage": "http://paul-m-jones.com"
+            }
+        ],
+        "description": "Installs Aura packages using the Composer defaults.",
+        "keywords": [
+            "aura",
+            "installer"
+        ]
+    },
+    {
         "name": "aura/filter",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "https://github.com/auraphp/Aura.Filter",
-            "reference": "64c02f1c028d9af8f355d400448db49724b949a9"
+            "url": "https://github.com/auraphp/Aura.Filter.git",
+            "reference": "1.0.0-beta1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/auraphp/Aura.Filter/zipball/64c02f1c028d9af8f355d400448db49724b949a9",
-            "reference": "64c02f1c028d9af8f355d400448db49724b949a9",
+            "url": "https://api.github.com/repos/auraphp/Aura.Filter/zipball/1.0.0-beta1",
+            "reference": "1.0.0-beta1",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.4.0",
-            "aura/default-installer": "*"
+            "aura/installer-default": ">=1.0.0",
+            "php": ">=5.4.0"
         },
-        "time": "2012-09-04 17:18:59",
+        "time": "2012-11-29 00:00:00",
         "type": "aura-package",
         "installation-source": "source",
         "autoload": {
             "psr-0": {
                 "Aura\\Filter": "src/"
             }
-        }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-2-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Paul M. Jones",
+                "email": "pmjones88@gmail.com",
+                "homepage": "http://paul-m-jones.com"
+            },
+            {
+                "name": "Hari KT",
+                "email": "kthari85@gmail.com",
+                "homepage": "http://harikt.com"
+            },
+            {
+                "name": "Aura.Filter Contributors",
+                "homepage": "https://github.com/auraphp/Aura.Filter/contributors"
+            }
+        ],
+        "description": "The Aura Filter package provides tools to validate and sanitize data objects and arrays.",
+        "homepage": "http://auraphp.github.com/Aura.Filter",
+        "keywords": [
+            "filter",
+            "sanitize",
+            "validate"
+        ]
     }
 ]

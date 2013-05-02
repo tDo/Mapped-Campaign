@@ -11,5 +11,5 @@ return array(
     'Doctrine\\DBAL' => $vendorDir . '/doctrine/dbal/lib/',
     'Doctrine\\Common' => $vendorDir . '/doctrine/common/lib/',
     'Aura\\Filter' => $vendorDir . '/aura/filter/src/',
-    'Aura\\Composer\\' => $vendorDir . '/aura/default-installer/src/',
+    'Aura\\Composer\\' => array($vendorDir . '/aura/default-installer/src/', $vendorDir . '/aura/installer-default/src/'),
 );

@@ -1,36 +1,229 @@
 {
-    "hash": "76d82bfbba553a3f6fb127d5c6d74b74",
+    "hash": "7b000049a37db129cdae0a9386fefc72",
     "packages": [
         {
-            "package": "aura/default-installer",
+            "name": "aura/default-installer",
             "version": "dev-master",
-            "source-reference": "ea68f15820fb3a9b703f657854657965d20cceb4",
-            "commit-date": "1345088820"
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/default-installer",
+                "reference": "ea68f15820fb3a9b703f657854657965d20cceb4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/auraphp/default-installer/zipball/ea68f15820fb3a9b703f657854657965d20cceb4",
+                "reference": "ea68f15820fb3a9b703f657854657965d20cceb4",
+                "shasum": ""
+            },
+            "type": "composer-installer",
+            "extra": {
+                "class": "Aura\\Composer\\DefaultInstaller"
+            },
+            "autoload": {
+                "psr-0": {
+                    "Aura\\Composer\\": "src/"
+                }
+            },
+            "time": "2012-08-16 03:47:00"
         },
         {
-            "package": "aura/filter",
+            "name": "aura/filter",
             "version": "dev-master",
-            "source-reference": "64c02f1c028d9af8f355d400448db49724b949a9",
-            "commit-date": "1346779139"
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Filter.git",
+                "reference": "1.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Filter/zipball/1.0.0-beta1",
+                "reference": "1.0.0-beta1",
+                "shasum": ""
+            },
+            "require": {
+                "aura/installer-default": ">=1.0.0",
+                "php": ">=5.4.0"
+            },
+            "type": "aura-package",
+            "autoload": {
+                "psr-0": {
+                    "Aura\\Filter": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul M. Jones",
+                    "email": "pmjones88@gmail.com",
+                    "homepage": "http://paul-m-jones.com"
+                },
+                {
+                    "name": "Hari KT",
+                    "email": "kthari85@gmail.com",
+                    "homepage": "http://harikt.com"
+                },
+                {
+                    "name": "Aura.Filter Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Filter/contributors"
+                }
+            ],
+            "description": "The Aura Filter package provides tools to validate and sanitize data objects and arrays.",
+            "homepage": "http://auraphp.github.com/Aura.Filter",
+            "keywords": [
+                "filter",
+                "sanitize",
+                "validate"
+            ],
+            "time": "2012-11-29 13:49:10"
         },
         {
-            "package": "doctrine/common",
-            "version": "2.2.3"
+            "name": "aura/installer-default",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/installer-default",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/auraphp/installer-default/archive/1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": ""
+            },
+            "type": "composer-installer",
+            "extra": {
+                "class": "Aura\\Composer\\DefaultInstaller"
+            },
+            "autoload": {
+                "psr-0": {
+                    "Aura\\Composer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul M. Jones",
+                    "email": "pmjones88@gmail.com",
+                    "homepage": "http://paul-m-jones.com"
+                }
+            ],
+            "description": "Installs Aura packages using the Composer defaults.",
+            "keywords": [
+                "aura",
+                "installer"
+            ],
+            "time": "2012-11-26 21:35:57"
         },
         {
-            "package": "doctrine/dbal",
-            "version": "2.2.2"
+            "name": "doctrine/common",
+            "version": "2.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/common",
+                "reference": "2.2.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/common/zipball/2.2.3",
+                "reference": "2.2.3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common": "lib/"
+                }
+            }
         },
         {
-            "package": "doctrine/orm",
-            "version": "2.2.2"
+            "name": "doctrine/dbal",
+            "version": "2.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/dbal",
+                "reference": "2.2.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/dbal/zipball/2.2.2",
+                "reference": "2.2.2",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": ">=2.2.0,<=2.2.99",
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\DBAL": "lib/"
+                }
+            }
         },
         {
-            "package": "slim/slim",
-            "version": "2.1.0"
+            "name": "doctrine/orm",
+            "version": "2.2.2",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/doctrine/doctrine2.git",
+                "reference": "2.2.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/doctrine2/zipball/2.2.2",
+                "reference": "2.2.2",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": ">=2.2.0,<2.2.99",
+                "doctrine/dbal": ">=2.2.1,<2.2.99",
+                "ext-pdo": "*",
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\ORM": "lib/"
+                }
+            }
+        },
+        {
+            "name": "slim/slim",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeguy/Slim",
+                "reference": "2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/codeguy/Slim/zipball/2.1.0",
+                "reference": "2.1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Slim": "."
+                }
+            }
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+
+    ],
     "aliases": [
 
     ],
@@ -38,5 +231,11 @@
     "stability-flags": {
         "aura/filter": 20,
         "aura/default-installer": 20
-    }
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
 }
