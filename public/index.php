@@ -1,4 +1,14 @@
 <?php
+// Start the session before anything else
+session_cache_limiter(false);
+session_start();
+
+// define the base uri of the application (the main url)
+// It will then hold the url to this script file (Thus the path to where we are located)
+// And can be added by just placing BASE_URI in the string parts we require it
+define('BASE_URI', dirname($_SERVER['PHP_SELF']) .'/');
+
+// And then require the autoloader
 require __DIR__ .'/../vendor/autoload.php';
 
 use Doctrine\ORM\Tools\Setup;
@@ -24,6 +34,9 @@ $app->config(array(
     'debug'          => true, //$config->app["debug"],
     'templates.path' => __DIR__ .'/../views/'
 ));
+
+// And require helper function files
+require_once('../Functions/Users.php');     // User specific function helpers
 
 /**
  * Helper function to retrieve any type of entity in a json encoded version
@@ -131,7 +144,8 @@ $app->get('/createSchema', function() use ($app, $em) {
         $em->getClassMetadata('Entities\Map'),
         $em->getClassMetadata('Entities\Region'),
         $em->getClassMetadata('Entities\District'),
-        $em->getClassMetadata('Entities\Location')
+        $em->getClassMetadata('Entities\Location'),
+        $em->getClassMetadata('Entities\User')
     );
 
     $tool->dropSchema($classes);
@@ -140,9 +154,41 @@ $app->get('/createSchema', function() use ($app, $em) {
 
 // Define routes
 $app->get('/', function() use ($app) {
-    $app->render('index.php');
+    $app->render('index.php', array('isLoggedIn' => Users::isLoggedIn(),
+                                    'username'   => isset($_SESSION['username']) ? $_SESSION['username'] : '',
+                                    'userid'     => isset($_SESSION['userid'])   ? $_SESSION['userid']   : 0));
 });
 
+/**
+ * POST - Login user
+ * This will verify if a user with the given name and password exists
+ * and create the session for him/her
+ **/
+$app->post('/login', function() use($app, $em) {
+    if (Users::login()) {
+        // Login successful, logged in, just reload that page
+        // Well you may fill in further code here...
+        $app->flash('success', 'Erfolgreich angemeldet');
+    } else {
+        // Login failure
+        $app->flash('error', 'Benutzername oder Passwort sind falsch');
+    }
+
+    // And redirect to main page either way...
+    $app->redirect(BASE_URI);
+});
+
+/**
+ * GET - Logout user
+ * Will clean up a user's session and log him/her out again
+ **/
+$app->get('/logout', function() use($app, $em) {
+    // Logout and redirect back to start page
+    Users::logout();
+    $app->flash('success', 'See you later aligator');
+
+    $app->redirect(BASE_URI);
+});
 
 
 /**
@@ -169,6 +215,8 @@ $app->get('/district/:id', function($id) use ($app, $em) {
  * required post data holds region_id, name and description
  */
 $app->post('/district/add/', function() use ($app, $em) {
+    Users::requireLoggedin();
+
     change('Entities\District::create', $app, $em);
 });
 
@@ -178,6 +226,8 @@ $app->post('/district/add/', function() use ($app, $em) {
  * Valid data includes region_id, distric_id, name and description
  */
 $app->put('/district/edit/', function() use ($app, $em) {
+    Users::requireLoggedin();
+
     change('Entities\District::edit', $app, $em);
 });
 
@@ -186,6 +236,8 @@ $app->put('/district/edit/', function() use ($app, $em) {
  * By calling this route a district and all locations, points of intereset and buildings in it will be removed
  */
 $app->delete('/district/delete/:id', function($id) use ($app, $em) {
+    Users::requireLoggedin();
+
     delete('Entities\District', (int) $id, $app, $em);
 });
 
@@ -195,14 +247,20 @@ $app->get('/location/:id', function($id) use ($app, $em) {
 });
 
 $app->post('/location/add/', function() use($app, $em) {
+    Users::requireLoggedin();
+
     change('Entities\Location::create', $app, $em);
 });
 
 $app->put('/location/edit/', function() use($app, $em) {
+    Users::requireLoggedin();
+
     change('Entities\Location::edit', $app, $em);
 });
 
 $app->delete('/location/delete/:id', function($id) use($app, $em) {
+    Users::requireLoggedin();
+
     delete('Entities\Location', (int) $id, $app, $em);
 });
 

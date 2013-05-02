@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +19,19 @@
     // Initialization function when the document is ready
     $(document).ready(function () {
         // Create map instance and load the map
-        var map    = new Campaign.Map(1, 'map_canvas');
+        var map    = new Campaign.Map(1, 'map_canvas', <?= $this->data['isLoggedIn'] ? 'true' : 'false'; ?>);
+
+        <?php
+          // If there are messages from the application, show them here
+          if (isset($flash['error'])) {
+        ?>
+          Campaign.Messages.addError("Fehler! ", "<?= htmlspecialchars($flash['error']); ?>")
+
+        <?php } else if (isset($flash['success'])) { ?>
+
+          Campaign.Messages.addSuccess("Yay! ", "<?= htmlspecialchars($flash['success']); ?>")
+
+        <?php } ?>
     });
     </script>
 </head>
@@ -37,6 +48,10 @@
                 <div class="navbar-inner">
                     <a class="brand" href="/">Kampagnenspiel</a>
                     <ul class="nav">
+                        <?php
+                          // Only show editor menu if the user is even logged in
+                          if ($this->data['isLoggedIn']) {
+                        ?>
                         <li class="dropdown active">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <span class="editorcaption">Default</span>
@@ -49,6 +64,27 @@
                                 <li data-editormode="AddLocation"><a tabindex="-1" href="#"><i class="icon-map-marker"></i> Ort eintragen</a></li>
                             </ul>
                         </li>
+
+                        <li><a href="<?= BASE_URI; ?>logout">Logout <small>(<?= htmlspecialchars($this->data['username']); ?>)</small></a></li>
+
+                        <?php 
+                          // If the user is not logged in, show a login form here
+                          } else {
+                        ?>
+
+                          <form class="navbar-form pull-left" 
+                                action="<?= BASE_URI; ?>login"
+                                method="post">
+
+                              <input type="text" class="span4" name="username" placeholder="Name"/>
+                              <input type="password" class="span4" name="password" placeholder="Passwort"/>
+
+                              <button type="submit" class="btn">Login</button>
+                          </form>
+
+
+                        <?php } ?>
+
                     </ul>
                 </div>
             </div>

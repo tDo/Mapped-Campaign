@@ -119,8 +119,9 @@ Campaign.CustomMapType = function(tilesPath) {
  *
  * @param {Integer}    mapId             Id of the map (As stored in the database)
  * @param {String}     mapContainerDomId DOM-Element id of the map container
+ * @param {Boolean}    allowEditing      Wether the editor shall be enabled or not
  */
-Campaign.Map = function(mapId, mapContainerDomId) {
+Campaign.Map = function(mapId, mapContainerDomId, allowEditing) {
     // Reference to self for context
     var self = this;
 
@@ -200,8 +201,8 @@ Campaign.Map = function(mapId, mapContainerDomId) {
     // Initialize the actual map
     this.map       = new google.maps.Map(document.getElementById(mapContainerDomId), mapOptions);
 
-    // Add the editor
-    this.editor = new Campaign.Editor(self);
+    // Add the editor (If editing is allowed)
+    if (allowEditing) this.editor = new Campaign.Editor(self);
 
     // Create the districts instance
     this.districts = new Campaign.Districts(this);
